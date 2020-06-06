@@ -1,5 +1,6 @@
 var issueContainerEl = document.querySelector("#issues-container");
 var limitWarningEl = document.querySelector("#limit-warning");
+var repoNameEl = document.querySelector("#repo-name");
 
 var getRepoIssues = function(repo) {
     var apiUrl = "https://api.github.com/repos/" + repo + "/issues?direction=asc";
@@ -17,9 +18,26 @@ var getRepoIssues = function(repo) {
             });
         }
         else {
-            alert("There was a problem with your request!");
+            // if not successful redirect to the homepage. 
+            document.location.replace("./index.html");
         }
     });
+};
+                // why does this function not have a name? 
+var getRepoName = function() {
+    // grab repo name from url query string
+    var queryString = document.location.search;
+    var repoName = queryString.split("=")[1];
+    // what does this do?? I'm not sure how this works. 
+    if(repoName) {
+        // display repo name on the page
+        repoNameEl.textContent = repoName;
+        getRepoIssues(repoName);
+    }
+    else {
+        // if no repo was given, redirect to the home page
+        document.location.replace("./index.html");
+    }
 };
 
 var displayIssues = function(issues) {
@@ -68,5 +86,4 @@ var displayWarning = function(repo) {
     // append to warning container
     limitWarningEl.appendChild(linkEl);
 };
-
-getRepoIssues("expressjs/express");
+getRepoName();
