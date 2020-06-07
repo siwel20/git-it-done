@@ -2,8 +2,8 @@ var issueContainerEl = document.querySelector("#issues-container");
 var limitWarningEl = document.querySelector("#limit-warning");
 var repoNameEl = document.querySelector("#repo-name");
 
-var getRepoIssues = function(repo) {
-    var apiUrl = "https://api.github.com/repos/" + repo + "/issues?direction=asc";
+var getRepoIssues = function(repoName) {
+    var apiUrl = "https://api.github.com/repos/" + repoName + "/issues?direction=asc";
 
     fetch(apiUrl).then(function(response) {
         // request was successful
@@ -13,7 +13,7 @@ var getRepoIssues = function(repo) {
 
                 //check is api has paginated issues
                 if (response.headers.get("Link")) {
-                    displayWarning(repo);
+                    displayWarning(repoName);
                 }
             });
         }
@@ -40,21 +40,21 @@ var getRepoName = function() {
     }
 };
 
-var displayIssues = function(issues) {
-    if (issues.length === 0) {
+var displayIssues = function(data) {
+    if (data.length === 0) {
         issueContainerEl.textContent = "This repo has no open issues!";
         return;
     }
-    for (var i = 0; i < issues.length; i++) {
+    for (var i = 0; i < data.length; i++) {
         // create a link element to take users to the issue on github
         var issueEl = document.createElement("a");
         issueEl.classList = "list-item flex-row justify-space-between align-center";
-        issueEl.setAttribute("href", issues[i].html_url);
+        issueEl.setAttribute("href", data[i].html_url);
         issueEl.setAttribute("target", "_blank");
 
         // creaete span to hold issues title
         var titleEl = document.createElement("span");
-        titleEl.textContent = issues[i].title;
+        titleEl.textContent = data[i].title;
 
         //append to container 
         issueEl.appendChild(titleEl);
@@ -63,7 +63,7 @@ var displayIssues = function(issues) {
         var typeEl = document.createElement("span");
 
         // check if issue is an actual issue or a pull request
-        if (issues[i].pull_request) {
+        if (data[i].pull_request) {
             typeEl.textContent = "(Pull request)";
         } else {
             typeEl.textContent = "(Issue)";
