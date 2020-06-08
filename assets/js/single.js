@@ -23,12 +23,12 @@ var getRepoIssues = function(repoName) {
         }
     });
 };
-                // why does this function not have a name? 
+
 var getRepoName = function() {
     // grab repo name from url query string
     var queryString = document.location.search;
     var repoName = queryString.split("=")[1];
-    // what does this do?? I'm not sure how this works. 
+    
     if(repoName) {
         // display repo name on the page
         repoNameEl.textContent = repoName;
